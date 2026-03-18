@@ -4,6 +4,7 @@ import DeleteModal from "../components/delete-modal";
 import EditModal from "../components/edit-modal";
 import Header from "../components/header";
 import PostCard from "../components/post-card";
+import Spinner from "../components/spinner";
 import { usePosts } from "../hooks/use-posts";
 import { useUsername } from "../hooks/use-username";
 import type { Post } from "../types";
@@ -29,7 +30,7 @@ export default function MainPage() {
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+        if (entries[0].isIntersecting && !isFetchingNextPage) {
           fetchNextPage();
         }
       },
@@ -50,7 +51,7 @@ export default function MainPage() {
 
           {isLoading && (
             <div className="flex justify-center py-10">
-              <div className="w-8 h-8 border-4 border-[#7695EC] border-t-transparent rounded-full animate-spin" />
+              <Spinner />
             </div>
           )}
 
@@ -74,7 +75,7 @@ export default function MainPage() {
 
           {isFetchingNextPage && (
             <div className="flex justify-center py-4">
-              <div className="w-6 h-6 border-4 border-[#7695EC] border-t-transparent rounded-full animate-spin" />
+              <Spinner size="sm" />
             </div>
           )}
         </main>
