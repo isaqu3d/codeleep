@@ -61,6 +61,12 @@ export default function MainPage() {
             </p>
           )}
 
+          {!isLoading && !isError && posts.length === 0 && (
+            <p className="text-center text-[#777777] py-10">
+              No posts yet. Be the first to share something!
+            </p>
+          )}
+
           {posts.map((post) => (
             <PostCard
               key={post.id}
