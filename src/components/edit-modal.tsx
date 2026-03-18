@@ -28,7 +28,7 @@ export default function EditModal({ post, onClose }: EditModalProps) {
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-2xl w-full max-w-[660px] overflow-hidden">
-        <div className="px-6 py-5 border-b border-[#999999]">
+        <div className="px-6 pt-5">
           <h2 className="text-[22px] font-bold text-black">Edit item</h2>
         </div>
 
