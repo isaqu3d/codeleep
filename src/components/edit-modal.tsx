@@ -26,8 +26,8 @@ export default function EditModal({ post, onClose }: EditModalProps) {
   const isDisabled = !title.trim() || !content.trim() || isPending;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl w-full max-w-[660px] overflow-hidden">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 animate-fade-in">
+      <div className="bg-white rounded-2xl w-full max-w-[660px] overflow-hidden animate-modal-in">
         <div className="px-6 pt-5">
           <h2 className="text-[22px] font-bold text-black">Edit item</h2>
         </div>
