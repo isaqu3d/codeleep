@@ -61,10 +61,9 @@ export default function CreatePostForm({ username }: CreatePostFormProps) {
           <button
             onClick={handleCreate}
             disabled={isDisabled}
-            className="bg-[#7695EC] text-white font-bold text-base px-7 h-8 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#5a7de0] transition-colors cursor-pointer flex items-center gap-2"
+            className="bg-[#7695EC] text-white font-bold text-base w-24 h-8 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#5a7de0] transition-colors cursor-pointer flex items-center justify-center"
           >
-            {isPending && <Spinner size="xs" />}
-            Create
+            {isPending ? <Spinner size="xs" /> : "Create"}
           </button>
         </div>
       </div>
