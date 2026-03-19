@@ -21,7 +21,7 @@ function getLikeCounts(): Record<number, number> {
   }
 }
 
-function fakeLikeRequest(_postId: number, _action: 'like' | 'unlike'): Promise<void> {
+function fakeLikeRequest(): Promise<void> {
   return new Promise((resolve) => {
     setTimeout(resolve, Math.random() * 300 + 150)
   })
@@ -37,14 +37,12 @@ export function usePostLike(postId: number, username: string) {
 
     const previousLiked = liked
     const previousCount = count
-    const action = previousLiked ? 'unlike' : 'like'
-
     setLiked(!previousLiked)
     setCount(previousLiked ? Math.max(0, previousCount - 1) : previousCount + 1)
     setIsPending(true)
 
     try {
-      await fakeLikeRequest(postId, action)
+      await fakeLikeRequest()
 
       const userLikes = getUserLikes(username)
       const counts = getLikeCounts()
