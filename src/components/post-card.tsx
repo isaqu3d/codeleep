@@ -21,12 +21,12 @@ export default function PostCard({
   const timeAgo = formatDistanceToNow(new Date(post.created_datetime), {
     addSuffix: true,
   });
-  const { liked, count, toggle } = usePostLike(post.id, currentUsername);
+  const { liked, count, toggle, isPending } = usePostLike(post.id, currentUsername);
   const [animKey, setAnimKey] = useState(0);
 
   function handleLike() {
     toggle();
-    setAnimKey((k) => k + 1);
+    if (!liked) setAnimKey((k) => k + 1);
   }
 
   return (
@@ -65,7 +65,8 @@ export default function PostCard({
         <div className="flex justify-end mt-3">
           <button
             onClick={handleLike}
-            className="flex items-center gap-1.5 text-sm text-[#777777] hover:text-red-400 transition-colors cursor-pointer"
+            disabled={isPending}
+            className="flex items-center gap-1.5 text-sm text-[#777777] hover:text-red-400 transition-colors cursor-pointer disabled:cursor-default disabled:opacity-70"
             aria-label={liked ? "Unlike post" : "Like post"}
           >
             <FiHeart
