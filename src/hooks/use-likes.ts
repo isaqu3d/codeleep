@@ -21,28 +21,51 @@ function getLikeCounts(): Record<number, number> {
   }
 }
 
+function fakeLikeRequest(_postId: number, _action: 'like' | 'unlike'): Promise<void> {
+  return new Promise((resolve) => {
+    setTimeout(resolve, Math.random() * 300 + 150)
+  })
+}
+
 export function usePostLike(postId: number, username: string) {
   const [liked, setLiked] = useState(() => getUserLikes(username).has(postId))
   const [count, setCount] = useState(() => getLikeCounts()[postId] ?? 0)
+  const [isPending, setIsPending] = useState(false)
 
-  function toggle() {
-    const userLikes = getUserLikes(username)
-    const counts = getLikeCounts()
+  async function toggle() {
+    if (isPending) return
 
-    if (userLikes.has(postId)) {
-      userLikes.delete(postId)
-      counts[postId] = Math.max(0, (counts[postId] ?? 1) - 1)
-      setLiked(false)
-    } else {
-      userLikes.add(postId)
-      counts[postId] = (counts[postId] ?? 0) + 1
-      setLiked(true)
+    const previousLiked = liked
+    const previousCount = count
+    const action = previousLiked ? 'unlike' : 'like'
+
+    setLiked(!previousLiked)
+    setCount(previousLiked ? Math.max(0, previousCount - 1) : previousCount + 1)
+    setIsPending(true)
+
+    try {
+      await fakeLikeRequest(postId, action)
+
+      const userLikes = getUserLikes(username)
+      const counts = getLikeCounts()
+
+      if (previousLiked) {
+        userLikes.delete(postId)
+        counts[postId] = Math.max(0, (counts[postId] ?? 1) - 1)
+      } else {
+        userLikes.add(postId)
+        counts[postId] = (counts[postId] ?? 0) + 1
+      }
+
+      localStorage.setItem(USER_LIKES_PREFIX + username, JSON.stringify([...userLikes]))
+      localStorage.setItem(COUNTS_KEY, JSON.stringify(counts))
+    } catch {
+      setLiked(previousLiked)
+      setCount(previousCount)
+    } finally {
+      setIsPending(false)
     }
-
-    localStorage.setItem(USER_LIKES_PREFIX + username, JSON.stringify([...userLikes]))
-    localStorage.setItem(COUNTS_KEY, JSON.stringify(counts))
-    setCount(counts[postId])
   }
 
-  return { liked, count, toggle }
+  return { liked, count, toggle, isPending }
 }
